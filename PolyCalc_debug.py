@@ -1,4 +1,3 @@
-# 与exe放在同一目录下
 from flask import Flask, render_template, request
 import subprocess
 
@@ -21,11 +20,11 @@ def index():
             input_data = f"{output_format}\n{operator}\n{poly1}\n{poly2}\n"
         else:  # 其他操作符，比如求导，只需要poly1
             input_data = f"{output_format}\n{operator}\n{poly1}\n"
-        # print(input_data)
+        print(input_data)
         try:
             # 使用 Popen 调用 C 程序并通过标准输入传递参数
             process = subprocess.Popen(
-                ["./CPolynomialCalculator.exe"],  # C 程序的路径
+                ["cmake-build-release/CPolynomialCalculator.exe"],  # C 程序的路径
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
@@ -33,7 +32,7 @@ def index():
             )
             # 传递标准输入
             stdout, stderr = process.communicate(input=input_data)
-            # print(stdout, stderr)
+            print(stdout, stderr)
 
             if stderr:
                 result = f"Error: {stderr}"
@@ -46,4 +45,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
