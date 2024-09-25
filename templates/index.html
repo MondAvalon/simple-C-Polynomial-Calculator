@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>多项式计算器</title>
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <link rel="stylesheet"
+              type="text/css"
+              href="{{ url_for('static',filename='styles/index.css') }}">
+        <link rel="stylesheet" type="text/css" href="../static/styles/index.css">
+        <script>
+        function togglePoly2Input() {
+            // 获取运算符的值
+            var operator = document.getElementById("operator").value;
+            var poly2Div = document.getElementById("poly2_div");
+
+            // 判断运算符是否为导数 ('d')，隐藏或显示 poly2 输入框
+            if (operator === 'd') {
+                poly2Div.style.display = 'none'; // 隐藏 poly2 输入框
+            } else {
+                poly2Div.style.display = 'block'; // 显示 poly2 输入框
+            }
+        }
+        </script>
+    </head>
+    <body>
+        <h1>多项式计算器</h1>
+        <br>
+        <form method="post">
+            <!-- 第一个多项式输入框 -->
+            <label for="poly1">第一个多项式</label>
+            <input type="text"
+                   id="poly1"
+                   name="poly1"
+                   value="{{ request.form.poly1 }}"
+                   required>
+            <br>
+            <br>
+            <!-- 运算符输入框，选择时调用 JavaScript 函数 -->
+            <label for="operator">运算符</label>
+            <select id="operator" name="operator" onchange="togglePoly2Input()" required>
+                <option value="+"{% if request.form.operator == '+' %}selected{% endif %}>+ 加法</option>
+                <option value="-"{% if request.form.operator == '-' %}selected{% endif %}>- 减法</option>
+                <option value="*"{% if request.form.operator == '*' %}selected{% endif %}>* 乘法</option>
+                <option value="d"{% if request.form.operator == 'd' %}selected{% endif %}>d 求导</option>
+            </select>
+            <br>
+            <br>
+            <!-- 第二个多项式输入框，初始显示，JavaScript控制显示和隐藏 -->
+            <div id="poly2_div">
+                <label for="poly2">第二个多项式</label>
+                <input type="text" id="poly2" name="poly2" value="{{ request.form.poly2 }}">
+                <br>
+                <br>
+            </div>
+            <!-- 输出格式输入框 -->
+            <label for="output_format">输出格式</label>
+            <!--input type="text" id="output_format" name="output_format" required-->
+            <select id="output_format" name="output_format" required>
+                <option value="m"
+                        {% if request.form.output_format == 'm' %}selected{% endif %}>数学表达式</option>
+                <option value="s"
+                        {% if request.form.output_format == 's' %}selected{% endif %}>参数序列</option>
+            </select>
+            <br>
+            <br>
+            <button type="submit">计算</button>
+        </form>
+        {% if result %}
+            <h2>计算结果:</h2>
+            <p>{{ result }}</p>
+        {% endif %}
+        <footer>
+            <p>By: 月海 Mond_Meer</p>
+        </footer>
+    </body>
+</html>
